@@ -21,12 +21,11 @@
             #pragma target 3.5
 
             #include "../ShaderLibrary/UnityInput.hlsl"
+            #include "../ShaderLibrary/Surface.hlsl"
+            #include "../ShaderLibrary/Light.hlsl"
+            #include "../ShaderLibrary/Lighting.hlsl"
             #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/UnityInstancing.hlsl"            
-            #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/SpaceTransforms.hlsl" 
-
-            CBUFFER_START(_CustomLight)
-                float3 _LightDir0;
-            CBUFFER_END
+            #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/SpaceTransforms.hlsl"             
 
             #pragma multi_compile_instancing
             #pragma vertex vert
@@ -34,6 +33,11 @@
 
             TEXTURE2D(_MainTex);
             SAMPLER(sampler_MainTex);
+
+            UNITY_INSTANCING_BUFFER_START(UnityPerMaterial)
+                UNITY_DEFINE_INSTANCED_PROP(float4, _MainTex_ST)
+                UNITY_DEFINE_INSTANCED_PROP(float4, _BaseColor)
+            UNITY_INSTANCING_BUFFER_END(UnityPerMaterial)
             
             struct Attributes
             {
@@ -71,10 +75,11 @@
                 // // return float4(input.normal, 1.0);
                 // return float4(normalize(input.normal), 1.0);
                 
-                float3 L = normalize(_LightDir0);
-                float3 N = normalize(input.normal);
+                Surface surface;
+                surface.normal = normalize(input.normal);
+                surface.color = _BaseColor;
 
-                return saturate(dot(L, N));                
+                return float4(GetLighting(surface), 1);                      
             }
 
             ENDHLSL

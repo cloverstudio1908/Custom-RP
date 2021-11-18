@@ -12,7 +12,8 @@
 
         Pass
         {
-            HLSLPROGRAM                        
+            HLSLPROGRAM        
+            #pragma target 3.5                
             
             #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Common.hlsl"
             
