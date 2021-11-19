@@ -4,7 +4,10 @@
 struct Surface
 {
     float3 normal;
+    float3 viewDir;
     float3 color;
+    float metallic;
+    float smoothness;
 };
 
 #endif
