@@ -88,7 +88,7 @@
                 Surface surface;
                 surface.normal = normalize(input.normal);
                 surface.viewDir = normalize(_WorldSpaceCameraPos - input.positionWS);
-                surface.color = UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _BaseColor);
+                surface.color = UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _BaseColor);                
                 surface.metallic = UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _Metallic);
                 surface.smoothness = UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _Smoothness);                                
 
