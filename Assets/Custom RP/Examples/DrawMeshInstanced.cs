@@ -25,8 +25,8 @@ public class DrawMeshInstanced : MonoBehaviour
 
         for(int i=0;i< count;++i)
         {
-            matrices[i] = Matrix4x4.TRS(Random.insideUnitSphere * 10, transform.rotation, transform.localScale);
-            colors[i] = new Color(Random.value, Random.value, Random.value, 1);
+            matrices[i] = Matrix4x4.TRS(transform.position + Random.insideUnitSphere * 10, transform.rotation, transform.localScale);
+            colors[i] = new Color(Random.value, Random.value, Random.value, Random.value);
             metallic[i] = Random.Range(0.0f,1.0f);
             smoothness[i] = Random.Range(0.5f, 0.95f);
         }
@@ -38,6 +38,6 @@ public class DrawMeshInstanced : MonoBehaviour
 
     private void Update()
     {        
-        Graphics.DrawMeshInstanced(mesh, 0, material, matrices, count, block);                
+        Graphics.DrawMeshInstanced(mesh, 0, material, matrices, count, block);
     }
 }
