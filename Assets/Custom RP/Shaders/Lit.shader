@@ -108,5 +108,23 @@
 
             ENDHLSL
         }
+
+        Pass
+        {
+            Tags
+            {
+                "LightMode" = "ShadowCaster"
+            }
+
+            ColorMask 0
+
+            HLSLPROGRAM
+            #pragma target 3.5
+            #pragma multi_compile_instancing
+            #pragma vertex ShadowCasterVert
+            #pragma fragment ShadowCasterFrag
+            #include "../ShaderLibrary/ShadowCasterPass.hlsl"
+            ENDHLSL
+        }
     }
 }
