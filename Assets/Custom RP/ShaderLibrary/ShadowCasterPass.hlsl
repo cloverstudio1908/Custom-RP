@@ -22,7 +22,8 @@ struct Atrributes
 
 struct Varyings
 {
-    float4 position : SV_POSITION;
+    float4 positionWS : UNUSED1;
+    float4 position : SV_POSITION;    
     float2 uv : UNUSED0;
     UNITY_VERTEX_INPUT_INSTANCE_ID
 };
@@ -33,7 +34,9 @@ Varyings ShadowCasterVert(Atrributes input)
     UNITY_SETUP_INSTANCE_ID(input);
     UNITY_TRANSFER_INSTANCE_ID(input, output);
 
-    output.position = mul(UNITY_MATRIX_VP, mul(UNITY_MATRIX_M, float4(input.vertex, 1.0)));
+    output.positionWS = mul(UNITY_MATRIX_M, float4(input.vertex, 1.0));
+    // output.position = mul(UNITY_MATRIX_VP, mul(UNITY_MATRIX_M, float4(input.vertex, 1.0)));
+    output.position = mul(UNITY_MATRIX_VP, output.positionWS);
     output.uv = input.uv;
     return output;
 }
@@ -41,7 +44,7 @@ Varyings ShadowCasterVert(Atrributes input)
 void ShadowCasterFrag(Varyings input)
 {
     UNITY_SETUP_INSTANCE_ID(input);
-    float4 col = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, input.uv);
+    float4 col = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, input.uv);    
     //return col;
 }
 

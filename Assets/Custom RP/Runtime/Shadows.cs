@@ -5,6 +5,7 @@ public class Shadows
 {
     const string bufferName = "Shadows";
     static int shadowAtlasId = Shader.PropertyToID("_ShadowAtlas");
+    static int shadowMatrix = Shader.PropertyToID("_ShadowMatrix");
 
     CommandBuffer buffer = new CommandBuffer()
     {
@@ -47,8 +48,9 @@ public class Shadows
 
             var sds = new ShadowDrawingSettings(cullingResults, lightIndex);
             cullingResults.ComputeDirectionalShadowMatricesAndCullingPrimitives(lightIndex, 0, 1, Vector3.zero, size, 0f, out Matrix4x4 viewMatrix, out Matrix4x4 projectionMatrix, out ShadowSplitData splitData);
-            sds.splitData = splitData;
+            sds.splitData = splitData;            
             buffer.SetViewProjectionMatrices(viewMatrix, projectionMatrix);
+            buffer.SetGlobalMatrix(shadowMatrix, projectionMatrix * viewMatrix);
             ExecuteBuffer();
             context.DrawShadows(ref sds);
         }

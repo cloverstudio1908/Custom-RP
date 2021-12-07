@@ -43,7 +43,13 @@
             #pragma fragment frag
 
             TEXTURE2D(_MainTex);
-            SAMPLER(sampler_MainTex);            
+            SAMPLER(sampler_MainTex);   
+
+            TEXTURE2D_SHADOW(_ShadowAtlas);
+            #define SHADOW_SAMPLER sampler_linear_clamp_compare
+            SAMPLER_CMP(SHADOW_SAMPLER);
+
+            float4x4 _ShadowMatrix;         
 
             UNITY_INSTANCING_BUFFER_START(UnityPerMaterial)
                 UNITY_DEFINE_INSTANCED_PROP(float4, _MainTex_ST)
@@ -100,10 +106,10 @@
                 surface.color = col.rgb;
                 surface.alpha = col.a;
                 surface.metallic = UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _Metallic);
-                surface.smoothness = UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _Smoothness);                                
+                surface.smoothness = UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _Smoothness);                                                
 
                 BRDF brdf = GetBRDF(surface);                
-                return float4(GetLighting(surface, brdf), surface.alpha);                      
+                return float4(GetLighting(surface, brdf), surface.alpha) + SAMPLE_TEXTURE2D_SHADOW(_ShadowAtlas, SHADOW_SAMPLER, mul(_ShadowMatrix, input.positionWS).xyz);                      
             }
 
             ENDHLSL
